@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./css/bootstrap.min.css" />
+        <title>Калькулятор метео by F.Champ</title>
+    </head>
+    <body>
+        <div class="container py-3">
+            <div class="row mb-2">
+                <div class="col">
+                    <h2 class="text-center">Калькулятор Метео</h2>
+                    <h6 class="text-center">Заполните все необходимые поля ниже</h6>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <form class="needs-validation" novalidate>
+                    <div class="col-12">
+                        <label>Атмосферное давление</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">H<sub>o</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="770" required />
+                            <span class="input-group-text">мм.рт.ст.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Угол ветра</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">α<sub>в</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="17" required />
+                            <span class="input-group-text">дел.углом.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Скорость ветра</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">V<sub>в</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="7" required />
+                            <span class="input-group-text">м/c</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Температура воздуха</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">t<sub>в</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="6" required />
+                            <span class="input-group-text">град. цел.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Высота метеопоста</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">h<sub>мп</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="100" required />
+                            <span class="input-group-text">метров</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-12">
+                        <label>Высота огневой позиции</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">h<sub>мп</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="80" required />
+                            <span class="input-group-text">метров</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Угол основ. направления</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">α<sub>он</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="21" required />
+                            <span class="input-group-text">дел.углом.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Температура заряда</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">△V<sub>0 сум</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="1.4" required />
+                            <span class="input-group-text">%</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Сум. отклонение нач. скорости</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">t<sub>з</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="5" required />
+                            <span class="input-group-text">град. цел.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="calculate">
+                            <button class="btn btn-primary w-100" type="submit">Расчёт</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-success table-striped table-responsive">
+                        <thead>
+                            <tr>
+                                <th colspan="3" scope="col">
+                                    <div class="d-flex">
+                                        Метео-1103-
+                                        <span class="cm_date">00000</span>-
+                                        <span class="cm_h_mp">0000</span>-
+                                        <span class="cm_bar">000</span>
+                                        <span class="cm_temp">00</span>
+                                    </div>
+                                </th>
+                                <td>02-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>04-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>08-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>12-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>16-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>20-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>24-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>30-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td>40-<span class="cmt_1">00</span><span class="cmt_2">00</span><span class="cmt_3">00</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- <script src="./js/bootstrap.bundle.min.js"></script> -->
+        <!-- <script src="./js/popper.min.js"></script> -->
+        <script src="./js/bootstrap.min.js"></script>
+
+        <script src="./js/script.js"></script>
+    </body>
+</html>
