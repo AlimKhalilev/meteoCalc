@@ -120,10 +120,24 @@ function replaceZero(num, length) { // замена минуса на 5ку с �
     return newNum;
 }
 
+function replaceZeroFifty(num, length) { // замена минуса на + 50 в первом столбце
+    let isNegative = (Math.sign(num) === -1);
+    let newNum;
+
+    if (isNegative) {
+        newNum = 50 + Math.abs(num);
+    }
+    else {
+        String(Math.abs(num)).padStart(length, 0);
+    }
+
+    return newNum;
+}
+
 function getTemperatureModify(temp) { // поправка температуры по таблице 1
     let modifyArr = 
     [
-        0, 0.1, 0.2, 0.3, 0.4, 0.5, 
+        0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
         0.6, 0.7, 0.8, 0.9, 1, 
         1, 1, 1, 1, 1,
         1.1, 1.2, 1.3, 1.4, 1.5,
@@ -159,6 +173,7 @@ function calcTempModify(temp) {
 }
 
 function get_cmt_1(temp) { // заполнить первый столб (поправки температуры)
+    console.log(temp)
     let tableData = [];
 
     if (temp >= 0) {
@@ -178,6 +193,18 @@ function get_cmt_1(temp) { // заполнить первый столб (поп
             [-8, -7, -7, -6, -6, -6, -5, -5, -4], // 8
             [-8, -8, -7, -7, -7, -6, -6, -5, -5], // 9
             [-9, -9, -8, -8, -7, -7, -7, -6, -6], // 10
+
+            [-10, -10, -9, -9, -8, -8, -8, -7, -7], // 11
+            [-11, -11, -10, -10, -9, -9, -9, -8, -8], // 12
+            [-12, -12, -11, -11, -10, -10, -10, -9, -9], // 13
+            [-13, -13, -12, -12, -11, -11, -11, -10, -10], // 14
+            [-14, -14, -13, -13, -12, -12, -12, -11, -11], // 15
+
+            [-15, -15, -14, -14, -13, -13, -13, -12, -12], // 16
+            [-16, -16, -15, -15, -14, -14, -14, -13, -13], // 17
+            [-17, -17, -16, -16, -15, -15, -15, -14, -14], // 18
+            [-18, -18, -17, -17, -16, -16, -16, -15, -15], // 19
+            [-19, -19, -18, -18, -17, -17, -17, -16, -16], // 20
         ];
         tableData = tableDataValues[temp];
     }
@@ -297,9 +324,9 @@ function mainCalculate() {
     pushHTML(".cm_date", calcFullDate() );
     pushHTML(".cm_h_mp", replaceZero(meteoData[4], 4) );
     pushHTML(".cm_bar", replaceZero(calcBarModify(meteoData[0]), 3) );
-    pushHTML(".cm_temp", replaceZero(calcTempModify(meteoData[3]), 2) );
+    pushHTML(".cm_temp", replaceZeroFifty(calcTempModify(meteoData[3]), 2) );
 
-    pushHTML(".cmt_1", meteoColumnData[0].map(item => replaceZero(item, 2) )); // заполнение первого столбца по высотам
+    pushHTML(".cmt_1", meteoColumnData[0].map(item => replaceZeroFifty(item, 2) )); // заполнение первого столбца по высотам
     pushHTML(".cmt_2", meteoColumnData[1].map(item => replaceZero(item, 2) ));
     pushHTML(".cmt_3", meteoColumnData[2].map(item => replaceZero(item, 2) ));
 

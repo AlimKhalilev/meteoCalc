@@ -17,7 +17,7 @@
             </div>
             <hr />
             <div class="row">
-                <form class="needs-validation" novalidate>
+                <!-- <form class="needs-validation" novalidate>
                     <div class="col-12">
                         <label>Атмосферное давление</label>
                         <div class="input-group mb-3 my-1">
@@ -105,7 +105,98 @@
                             <button class="btn btn-primary w-100" type="submit">Расчёт</button>
                         </div>
                     </div>
+                </form> -->
+           
+                <form class="needs-validation" novalidate>
+                    <div class="col-12">
+                        <label>Атмосферное давление</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">H<sub>o</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="760" required />
+                            <span class="input-group-text">мм.рт.ст.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Угол ветра</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">α<sub>в</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="14" required />
+                            <span class="input-group-text">дел.углом.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Скорость ветра</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">V<sub>в</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="4" required />
+                            <span class="input-group-text">м/c</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Температура воздуха</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">t<sub>в</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="2" required />
+                            <span class="input-group-text">град. цел.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Высота метеопоста</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">h<sub>мп</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="185" required />
+                            <span class="input-group-text">метров</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-12">
+                        <label>Высота огневой позиции</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">h<sub>оп</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="190" required />
+                            <span class="input-group-text">метров</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Угол основ. направления</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">α<sub>он</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="9" required />
+                            <span class="input-group-text">дел.углом.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Сум. отклонение нач. скорости</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">△V<sub>0 сум</sub></span>
+                            <input type="text" class="form-control form-control--meteo" value="-1" required />
+                            <span class="input-group-text">%</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label>Температура заряда</label>
+                        <div class="input-group mb-3 my-1">
+                            <span class="input-group-text">t<sub>з</sub></span>
+                            <input type="number" class="form-control form-control--meteo" value="0" required />
+                            <span class="input-group-text">град. цел.</span>
+                            <div class="invalid-feedback">Заполните поле!</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="calculate">
+                            <button class="btn btn-primary w-100" type="submit">Расчёт</button>
+                        </div>
+                    </div>
                 </form>
+
             </div>
         </div>
 
