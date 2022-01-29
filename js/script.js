@@ -128,13 +128,14 @@ function replaceZeroFifty(num, length) { // замена минуса на + 50 
         newNum = 50 + Math.abs(num);
     }
     else {
-        String(Math.abs(num)).padStart(length, 0);
+        newNum = String(Math.abs(num)).padStart(length, 0);
     }
 
     return newNum;
 }
 
-function getTemperatureModify(temp) { // поправка температуры по таблице 1
+function getTemperatureModify(temp) { // поправка температуры воздуха по таблице 1
+    let modifyTemp = 0;
     let modifyArr = 
     [
         0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 
@@ -147,7 +148,14 @@ function getTemperatureModify(temp) { // поправка температуры
         4.1, 4.2, 4.3, 4.4, 4.5
     ];
 
-    return +temp + modifyArr[temp];
+    if (temp < 0) { // если входная температура меньше нуля
+        modifyTemp = +temp;
+    }
+    else {
+        modifyTemp = +temp + modifyArr[temp]
+    }
+
+    return modifyTemp;
 }
 
 function calcFullDate() { // Возвращает строку полного времени: Метео-1103-(25123)-0100-02059
@@ -172,8 +180,18 @@ function calcTempModify(temp) {
     return Math.round(tempModern - 15.9);
 }
 
-function get_cmt_1(temp) { // заполнить первый столб (поправки температуры)
-    console.log(temp)
+function insertDopFormule(h_answer, h_mp, h_op, h_zero, _tz, _tv) {
+    document.querySelector("._h_data_zero").innerHTML = h_zero;
+    document.querySelector("._h_data_mp").innerHTML = h_mp;
+    document.querySelector("._h_data_op").innerHTML = h_op;
+    document.querySelector("._h_data_answer").innerHTML = h_answer;
+
+    document.querySelector("._tz").innerHTML = _tz;
+    //document.querySelector("._tv").innerHTML = _tv;
+}
+
+function get_cmt_1(temp) { // заполнить первый столб (поправки температуры воздуха)
+    //console.log(temp)
     let tableData = [];
 
     if (temp >= 0) {
@@ -205,9 +223,25 @@ function get_cmt_1(temp) { // заполнить первый столб (поп
             [-17, -17, -16, -16, -15, -15, -15, -14, -14], // 18
             [-18, -18, -17, -17, -16, -16, -16, -15, -15], // 19
             [-19, -19, -18, -18, -17, -17, -17, -16, -16], // 20
+
+            [-20, -20, -19, -19, -18, -18, -18, -17, -17], // 21
+            [-21, -21, -20, -20, -19, -19, -19, -18, -18], // 22
+            [-22, -22, -21, -21, -20, -20, -20, -19, -19], // 23
+            [-23, -23, -22, -22, -21, -21, -21, -20, -20], // 24
+            [-24, -24, -23, -23, -22, -22, -22, -21, -21], // 25
+
+            [-25, -25, -24, -24, -23, -23, -23, -22, -22], // 26
+            [-26, -26, -25, -25, -24, -24, -24, -23, -23], // 27
+            [-27, -27, -26, -26, -25, -25, -25, -24, -24], // 28
+            [-28, -28, -27, -27, -26, -26, -26, -25, -25], // 29
+            [-29, -29, -28, -28, -27, -27, -27, -26, -26], // 30
+
+            [-30, -30, -29, -29, -28, -28, -28, -27, -27], // 31
         ];
         tableData = tableDataValues[temp];
     }
+
+    //console.log(tableData);
 
     return tableData;
 }
@@ -219,10 +253,11 @@ function get_cmt_2(wingAngle) { // заполнить второй столб (�
 
 function get_cmt_3(wingSpeed) { // заполнить третий столб (поправки скорости ветра)
     let tableData = [
-        [],
-        [],
-        [],
-        [4, 5, 5, 5, 6, 6, 6, 6, 6], // 3
+        [1, 1, 1, 1, 1, 1, 1, 1, 1], // 0
+        [1, 2, 2, 2, 3, 3, 3, 3, 3], // 1
+        [3, 4, 4, 4, 5, 5, 5, 5, 5], // 2
+
+        [4, 5, 5, 5, 6, 6, 6, 6, 6], // 3 (уже табличные начинаются)
         [6, 7, 8, 8, 8, 9, 9, 9, 10], // 4
         [8, 10, 10, 11, 11, 11, 12, 12, 12], // 5
         [9, 11, 11, 12, 13, 13, 14, 14, 14], // 6
@@ -245,7 +280,12 @@ function getListAw(angle, meteoColumn, isInline) { // Расчет Aw (дире�
 
     bt_Ybul.forEach((item, i) => {
         if (isInline) {
-            awData.push(`Aw<sub>${i+1}</sub> = ${angle} - ${meteoColumn[bt_Ybul[i]]} = ${angle - meteoColumn[bt_Ybul[i]]}`);
+            awData.push(`
+                Aw<sub>${i+1}</sub> = 
+                ${AwToDelUgl(angle)} - 
+                ${AwToDelUgl(meteoColumn[bt_Ybul[i]])} = 
+                ${AwToDelUgl(angle - meteoColumn[bt_Ybul[i]])}
+            `);
         }
         else {
             let aw = angle - meteoColumn[bt_Ybul[i]];
@@ -256,24 +296,21 @@ function getListAw(angle, meteoColumn, isInline) { // Расчет Aw (дире�
     return awData;
 }
 
-function getListWxz(aw, meteoData, index, isInline) {
+function getListWxz(aw, meteoData, index) {
     return bt_Ybul.map((item, i) => {
-        //console.log(aw[i]);
         return tableWingBallistic[aw[i]][meteoData[bt_Ybul[i]]][index];
     });
 }
 
 function getListDsum(wz) {
     return bt_Ybul.map((item, i) => {
-        console.log(bt_Z[i], bt_Zw[i]);
+        //console.log(bt_Z[i], bt_Zw[i]);
         return Math.round((bt_Z[i]) + (0.1 * bt_Zw[i] * wz[i]));
     });
 }
 
 function getListDkm(wx, _H, _Tv, _Tz, _Vo) {
     let listData = [];
-
-    console.log(_H);
 
     bt_Ybul.forEach((item, i) => {
         let _Dw = Math.round(0.1 * bt_Xw[i] * wx[i]);
@@ -299,6 +336,17 @@ function getListDkm(wx, _H, _Tv, _Tz, _Vo) {
 function numToDelUgl(num) {
     let prefix = (Math.sign(num) === -1) ? "-0-" : "0-";
     return prefix + String(Math.abs(num)).padStart(2, 0);
+}
+
+function AwToDelUgl(num) {
+    let newStr = "";
+    if (num < 0) {
+        newStr = (60 + num) + "-00";
+    }
+    else {
+        newStr = num + "-00";
+    }
+    return newStr;
 }
 
 function mainCalculate() {
@@ -333,7 +381,9 @@ function mainCalculate() {
     let meteoAwData = getListAw(meteoData[6], meteoColumnData[1], false);
     pushHTML(".cmt_aw", getListAw(meteoData[6], meteoColumnData[1], true));
 
-    let [meteoWxData, meteoWzData] = [getListWxz(meteoAwData, meteoColumnData[2], 0), getListWxz(meteoAwData, meteoColumnData[2], 1)];
+    let meteoWxData = getListWxz(meteoAwData, meteoColumnData[2], 0);
+    let meteoWzData = getListWxz(meteoAwData, meteoColumnData[2], 1);
+
     pushHTML(".cmt_wx", meteoWxData.map((item, i) => `Wx<sub>${i+1}</sub> = ${item}`));
     pushHTML(".cmt_wz", meteoWzData.map((item, i) => `Wz<sub>${i+1}</sub> = ${item}`));
 
@@ -343,6 +393,8 @@ function mainCalculate() {
     let meteo_H = calcBarModify(meteoData[0]) + ((meteoData[4] - meteoData[5]) / 10);
     let meteo_Tv = bt_Ybul.map(item => meteoColumnData[0][item]);
     let meteo_Tz = meteoData[8] - 15;
+
+    insertDopFormule(meteo_H, meteoData[4], meteoData[5], calcBarModify(meteoData[0]), meteo_Tz, meteo_Tv);
 
     let meteoDkmData = getListDkm(meteoWxData, meteo_H, meteo_Tv, meteo_Tz, meteoData[7]);
     pushHTML(".cmt_Dkm", meteoDkmData);
@@ -360,16 +412,6 @@ function mainCalculate() {
     console.log("_Tv:", meteo_Tv);
 
 }
-
-
-
-
-
-
-
-
-
-
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
