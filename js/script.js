@@ -10,6 +10,10 @@ let bt_Xtz;
 let bt_Xvo;
 let bt_Ybul;
 
+let g_D_grp = [];
+let g_D_sum = [];
+let g_Ugl_sum = [];
+
 const tableWingBallistic = [
     [0, [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 0], [-6, 0], [-7, 0], [-8, 0], [-9, 0], [-10, 0], [-11, 0], [-12, 0], [-13, 0], [-14, 0], [-15, 0], [-16, 0], [-17, 0], [-18, 0], [-19, 0], [-20, 0]],
     [0, [-1, 0], [-2, 0], [-3, 0], [-4, 0], [-5, 1], [-6, 1], [-7, 1], [-8, 1], [-9, 1], [-10, 1], [-11, 1], [-12, 1], [-13, 1], [-14, 1], [-15, 2], [-16, 2], [-17, 2], [-18, 2], [-19, 2], [-20, 2]],
@@ -295,7 +299,7 @@ function getListAw(angle, meteoColumn, isInline) { // Расчет Aw (дире�
 
 function getListWxz(aw, meteoData, index) {
     return bt_Ybul.map((item, i) => {
-        console.log(item, meteoData);
+        // console.log(item, meteoData);
         return tableWingBallistic[aw[i]][meteoData[item]][index];
     });
 }
@@ -317,6 +321,8 @@ function getListDkm(wx, _H, _Tv, _Tz, _Vo) {
         let _Dtz = Math.round(0.1 * bt_Xtz[i] * _Tz);
         let _Dvo = Math.round(bt_Xvo[i] * _Vo);
 
+        let _Dsum = (_Dw + _Dn + _Dv + _Dtz + _Dvo);
+
         listData.push(`
             <span>△Dw<sub>${i+1}</sub> =  0.1 * ${bt_Xw[i]} * ${wx[i]} = ${_Dw}</span>
             <span>△Dн<sub>${i+1}</sub> =  0.1 * ${bt_Xn[i]} * ${_H} = ${_Dn}</span>
@@ -324,8 +330,11 @@ function getListDkm(wx, _H, _Tv, _Tz, _Vo) {
             <span>△Dтз<sub>${i+1}</sub> = 0.1 * ${bt_Xtz[i]} * ${_Tz} = ${_Dtz}</span>
             <span>△Dvo<sub>${i+1}</sub> = ${bt_Xvo[i]} * ${_Vo} = ${_Dvo}</span>
             <br>
-            <span>${i+1}км: <strong>${(_Dw + _Dn + _Dv + _Dtz + _Dvo)}м</strong></span>
+            <span>${i+1}км: <strong>${_Dsum}м</strong> | Д<sub>грп</sub> <strong>${((i+1)*1000) - _Dsum}м</strong></span>
         `);
+
+        g_D_grp.push(((i+1)*1000) - _Dsum);
+        g_D_sum.push(_Dsum);
     });
 
     return listData;
@@ -415,6 +424,7 @@ function mainCalculate() {
     pushHTML(".cmt_wz", meteoWzData.map((item, i) => `Wz<sub>${i+1}</sub> = ${item}`));
 
     let meteoDsumData = getListDsum(meteoWzData);
+    g_Ugl_sum = meteoDsumData;
     pushHTML(".cmt_dsum", meteoDsumData.map((item, i) => `△dсум<sub>${i+1}</sub> = (${bt_Z[i]}) + (0.1 * ${bt_Zw[i]} * ${meteoWzData[i]}) = <b>${numToDelUgl(item)}</b>`));
 
     let meteo_H = calcBarModify(meteoData[0]) + ((meteoData[4] - meteoData[5]) / 10);
@@ -438,6 +448,49 @@ function mainCalculate() {
     console.log("_Tz: ", meteo_Tz);
     console.log("_Tv:", meteo_Tv);
 
+    // console.log("g_D_sum", g_D_sum);
+    // console.log("g_D_grp", g_D_grp);
+
+}
+
+let input_grp = document.querySelector(".form-control-grp");
+let text_grp = document.querySelector(".input-group-text-grp");
+let text_grp_uglom = document.querySelector(".grp_uglom");
+
+if (input_grp !== null && text_grp !== null && text_grp_uglom !== null) {
+    let grp_value = 0;
+    input_grp.addEventListener("input", () => {
+        grp_value = calculateGrpDistance(input_grp.value);
+        grp_uglom_value = calculateGrpUglom(input_grp.value);
+        text_grp.innerHTML = `<strong>${grp_value}м</strong>&nbsp;| Д<sub>исч</sub> = <strong>${+input_grp.value + grp_value}м</strong>`;
+        text_grp_uglom.innerHTML = numToDelUgl(grp_uglom_value);
+    });
+}
+
+function calculateGrpDistance(val) {
+    let [firstIndex, secondIndex] = calculateGrpIndexes(val);
+    let coef = Math.round((g_D_grp[secondIndex] - g_D_grp[firstIndex]) / (g_D_sum[secondIndex] - g_D_sum[firstIndex]));
+    let addedNum = Math.round((val - g_D_grp[firstIndex]) / coef);
+    return (g_D_sum[firstIndex] + addedNum);
+}
+
+function calculateGrpUglom(val) {
+    let [firstIndex, secondIndex] = calculateGrpIndexes(val);
+    let coef = Math.round((g_D_grp[secondIndex] - g_D_grp[firstIndex]) / (g_Ugl_sum[secondIndex] - g_Ugl_sum[firstIndex]));
+    let addedNum = Math.round((val - g_D_grp[firstIndex]) / coef);
+    return (g_Ugl_sum[firstIndex] + addedNum);
+}
+
+function calculateGrpIndexes(val) {
+    let firstIndex, secondIndex;
+    for (let i = 0; i < g_D_grp.length; i++) {
+        if ((g_D_grp[i] - val) > 0) {
+            firstIndex = i - 1;
+            secondIndex = i;
+            break;
+        }
+    }
+    return [firstIndex, secondIndex];
 }
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
